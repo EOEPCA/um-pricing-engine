@@ -15,7 +15,7 @@
   <h3 align="center">um-pricing-engine</h3>
 
   <p align="center">
-    Policy Decision Point for EOEPCA project
+    Pricing Engine for EOEPCA project
     <br />
     <a href="https://eoepca.github.io/um-pricing-engine/"><strong>Explore the docs »</strong></a>
     <br />
