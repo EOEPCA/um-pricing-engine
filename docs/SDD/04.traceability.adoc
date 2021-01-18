@@ -1,0 +1,14 @@
+[[traceabilityMatrix]]
+= User Story Traceability
+
+.User Stories
+|===
+|Code |Description
+
+|EOEPCA-258	
+|Initial Repository and CI/CD Tooling Configuration
+
+|EOEPCA-250
+|Initial Pricing Engine Design and Documentation
+
+|===
