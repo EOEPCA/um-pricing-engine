@@ -23,7 +23,6 @@ The figure below, identifies the main workflows on which the Pricing Engine part
 
 image::../images/pricing_flow.png[top=5%, align=right, pdfwidth=6.5in]
 
-
 When launched, the Pricing Engine will answer to all requests to 1 specific paths:
 
 . Pricing Events: To calculate the rates and prices for a list of items.
@@ -37,7 +36,7 @@ Examples, given the example values of:
 | Token | Request to Pricing Engine | Pricing Engine Action | Pricing Engine answer
 
 | No RPT/OAuth token | pricing.domain.com | None (request does not get to Pricing endpoint) | None (the Pricing Engine doesn't see this request)
-| RPT/OAuth token + Policy information as data  | pdp.domain.com/policy/ | Register Policy in the Back-end Database | Policy_id for the policy just created 
+| RPT/OAuth token + Item information as data  | pricing.domain.com/pricing/ | Get the value for the item from the back-end database | Value for the item
 
 |===
 
@@ -48,14 +47,17 @@ Examples, given the example values of:
 
 ==== Pricing Engine API
 
-The PDP queries the corresponding PDP to retrieve information about a policy.
-For this case we can use the `/policy/<policy_id or ObjectId(policy_id)>` to do all the operations related to insert, get, update and delete policies.
+For this case we can use the `/pricing/<item_id or ObjectId(item_id)>` to do all the operations related to get the value for the item.
 
 === Consumed Interfaces
 
-==== OIDC (to Login Service) 
+==== OIDC (to Login Service)
+
+To be determinated
 
 ==== SCIM (to Login Service)
+
+To be determinated
 
 === Back-End databases
 
@@ -125,30 +127,20 @@ This section contains:
 
 ================================
 
-=== Policy Access Check Use Case
+=== Pricing 
 
-image::../images/use_case.png[top=5%, align=center]
+image::../images/use_case_pricing.png[top=5%, align=center]
 
 This diagram covers the following use cases:
 
-==== Policy Access Check
+==== Pricing Item Value
 
-When the PDP has obtained the policies, we proceed to compare the content of these policies with the values obtained from the request using the ScimHandler, mainly they are the resource id, action type, and the user_name, in case that some of these do not coincide, it will be response with "Deny" in the json or with a "Permit" if everything is correct.
+When the Billing Service generates billing reports, the Pricing Engine building block calculates rates and prices for a list of items.
 
-==== Policy Retrieval
+==== Registration of values
 
-The PDP access through the resource id that was extracted from the XACML in the request and using the Policy_Storage class, allows to access the Back-end databse and extracts all the policies information stored for that resource id.
+The process of registering the values for the items is performed in the main, for this purpose the Price_Storage class is used which will allow actions such as inserting prices in the pod where the Back-end database is located or in remote Back-end database.
 
-==== Get User Attributes
 
-SCIM will be used in order to obtain the attributes for the user that have been extracted from the XACML of the request and then use them in the PDP functions. The issuer variable of the XACML subject-id field can be optionally used to determine the SCIM Endpoint on which the PDP will attempt to perform attribute release. If this value is not available, it will be extracted from configuration or environment variables.
 
-=== Policy Repository Management
 
-==== Registration of policies
-
-The process of registering the policies is performed in the main, for this purpose the Policy_Storage class is used which will allow actions such as inserting policies in the pod where the Back-end database is located.
-
-=== Policy Delegation (to external PDPs)
-
-Whenever a policy rule has a **delegate** parameter with a reference URI to an external PDP, the current PDP will forward the xacml request to the external PDP referencing itself in it. The external PDP will validate the remaining policies (that were referenced with the **delegate** parameter). If the external PDP has the policy, it will return a permission granted on its side. If all the policy checks are positively validated (current PDP and foreign PDP(s)), the permission is granted. If otherwise any policy check fails to validate, the permission is denied.

@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+
+package PricingEngine{
+  usecase "Pricing Item" as pi
+  usecase "Item value" as iv
+}
+package BillingService{
+  usecase "Billing Service Core" as bs
+}
+bs --> pi : access
+pi ..> iv : get
+pi --> bs
+@enduml

@@ -85,7 +85,7 @@ git clone https://github.com/EOEPCA/um-pricing-engine.git
 4. Change local directory
 
 ```sh
-cd um-pep-engine
+cd um-pricing-engine
 ```
 ## Dependencies
 The PES is written and tested for python 3.6.9, and has all dependencies listed in src/requirements.txt
