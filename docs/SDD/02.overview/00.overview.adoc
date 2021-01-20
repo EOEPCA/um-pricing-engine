@@ -53,11 +53,25 @@ For this case we can use the `/pricing/<item_id or ObjectId(item_id)>` to do all
 
 ==== OIDC (to Login Service)
 
-To be determinated
+The Pricing Engine uses the OIDC protocol in order to authenticate itself as a valid UMA client, and uses this OIDC client in all UMA-related queries.It allows Clients to verify the identity of the End-User. (https://gluu.org/docs/gluu-server/4.0/admin-guide/openid-connect/)
+
+These queries are done against the Login Service, and the endpoints used are:
+
+* Discovery Endpoint: /.well-known/openid-configuration
+
+And the keys used from Well Known Handler:
+
+* Token Endpoint: KEY_OIDC_TOKEN_ENDPOINT
+* UserInfo Endpoint: KEY_OIDC_USERINFO_ENDPOINT
 
 ==== SCIM (to Login Service)
 
-To be determinated
+The Pricing Engine has the capability to auto-register itself as a client if there is no client pre-configured from previous starts or previous configuration. In order to do this, it utilizes the SCIM protocol which is designed to reduce the complexity of user management operations. (https://gluu.org/docs/gluu-server/3.1.1/user-management/scim2/)
+
+The keys used from Well Known Handler:
+
+* User Atributes: KEY_SCIM_USER_ENDPOINT
+* Private Key JWT Key: ENDPOINT_AUTH_CLIENT_PRIVATE_KEY_JWT
 
 === Back-End databases
 
