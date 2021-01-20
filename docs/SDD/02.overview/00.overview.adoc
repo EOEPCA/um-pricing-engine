@@ -142,8 +142,13 @@ This section contains:
 ================================
 
 === Pricing 
-
-image::../images/use_case_pricing.png[top=5%, align=center]
+[.text-center]
+[#img_pricingEngineCase,reftext='{figure-caption} {counter:figure-num}']
+.Pricing Engine Case
+[plantuml, pricing-engine-case, png] 
+....
+include::include/pricing-engine-case.wsd[]
+....
 
 This diagram covers the following use cases:
 
