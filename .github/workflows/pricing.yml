@@ -46,7 +46,7 @@ jobs:
       - name: Smoke and Acceptance Test
         run: ./travis/acceptanceTest.sh um-pricing-engine 8080 7000
       - name: Release Container
-        if: branch = master AND NOT type IN (pull_request)
+        if: github.ref == 'refs/heads/master' && github.event != 'pull_request'
         run: ./travis/release.sh um-pricing-engine
         
       
