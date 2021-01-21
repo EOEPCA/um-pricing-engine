@@ -49,6 +49,10 @@ Examples, given the example values of:
 
 For this case we can use the `/pricing/<item_id or ObjectId(item_id)>` to do all the operations related to get the value for the item.
 
+==== Remote Back-end Databases
+
+This component will also use a back-end databases that are remotely located and for this purpose, the connection to the databases will be established in different ways because the databases can be classified into different types.
+
 === Consumed Interfaces
 
 ==== OIDC (to Login Service)
@@ -126,7 +130,7 @@ The Pricing Engine is composed of three main components:
 
 * A local Back-end Database: This component store all information related to prices locally and will interact within the endpoints.
 
-* A remote Back-end Database: This component also store the information related to prices but in this case remotely.
+* Remote Back-end Databases: This component also store the information related to prices but in this case will use remotely databases.
 
 The next section <<mainDesign>>:: contains detailed descriptions and references needed to understand the intricacies of this component.
 
@@ -158,7 +162,7 @@ When the Billing Service generates billing reports, the Pricing Engine building 
 
 ==== Registration of values
 
-The process of registering the values for the items is performed in the main, for this purpose the Price_Storage class is used which will allow actions such as inserting prices in the pod where the Back-end database is located or in remote Back-end database.
+The process of registering the values for the items is performed in the main, the component use a class  which will allow actions such as inserting prices in the pod where the Back-end database is located or in remote Back-end database.
 
 
 
