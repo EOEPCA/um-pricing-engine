@@ -31,8 +31,10 @@ jobs:
       # Checks out a copy of your repository on the ubuntu-latest machine
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Setup Python
+      - name: Setup Python 3.6.9
         uses: actions/setup-python@v2
+        with:
+          python-version: 3.6.9
       - name: Install ubuntu dependencies
         run: sudo apt-get install jq python3-venv
       - name: Change to main folder
