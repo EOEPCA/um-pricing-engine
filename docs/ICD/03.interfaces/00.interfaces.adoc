@@ -1,27 +1,33 @@
-= Pricing Engine Interfaces
+= Policy Decision Point Interfaces
 
 [abstract]
 .Abstract
-This OpenAPI Document describes the endpoints exposed by Pricing Engine Building Block deployments.  <br> <br>
+This OpenAPI Document describes the endpoints exposed by Policy Decision Point Building Block deployments.  <br> <br> Using this API will allow to register policies that support the protection of policies using both the Login Service and the Policy Decision Point and to perform checks based on XACML requests and responses
 
 
 // markup not found, no include::{specDir}intro.adoc[opts=optional]
 
 
+
 == Endpoints
 
 
-[.PricingItem]
-=== Pricing Item
-
-`POST /pricing/TBD`
-
-===== Description (TBD)
-
-This operation returns the price for a item extracted from a back-end database.
+[.PricingCalculation]
+=== Pricing Calculation
 
 
-// markup not found, no include::{specDir}pricing/TBD/POST/spec.adoc[opts=optional]
+[.pricingCalculationPost]
+==== Pricing Events Calculation
+    
+`POST /pricing/calculate`
+
+Rates and prices for events
+
+===== Description 
+
+This operation calculates rates and prices for the event received in the JSON Request and then store the value in the database.
+
+// markup not found, no include::{specDir}pricing/calculate/POST/spec.adoc[opts=optional]
 
 
 
@@ -29,13 +35,16 @@ This operation returns the price for a item extracted from a back-end database.
 
 
 
-To be determinated
+
 
 
 
 ===== Return Type
 
-- Integer
+
+
+-
+
 
 ===== Responses
 
@@ -47,28 +56,551 @@ To be determinated
 
 | 200
 | OK
-|  Integer<<price>>
+|  <<>>
 
 |===         
 
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}pricing/TBD/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}pricing/calculate/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}pricing/TBD/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}pricing/calculate/POST/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :pricing/TBD/POST/POST.json[]
+// file not found, no * wiremock data link :pricing/calculate/POST/POST.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}pricing/TBD/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}pricing/calculate/POST/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
 
+
+[.PricingManagement]
+=== Pricing Management
+
+
+[.pricingGet]
+==== Pricing GET
+    
+`GET /pricing`
+
+List all rates and prices from the database
+
+===== Description 
+
+This operation lists all rates and prices filtered by event ID. Event ID is extracted from the JSON Request
+
+// markup not found, no include::{specDir}pricing/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+====== Header Parameters
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| Authorization 
+| JWT or Bearer Token  
+| - 
+ 
+
+|===         
+
+
+
+===== Return Type
+
+array[<<rate or price>>]
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| OK
+| List[<<rates and/or prices>>] 
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}pricing/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}pricing/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :pricing/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}pricing/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.pricingValueIdDelete]
+==== Pricing DELETE (ID)
+    
+`DELETE /pricing/{event_id}`
+
+Deletes a value from the database
+
+===== Description 
+
+This operation removes an existing value owned by the event.
+
+
+// markup not found, no include::{specDir}pricing/\{event_id\}/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| event_id 
+| Unique Event ID  
+| X 
+ 
+
+|===         
+
+
+
+====== Header Parameters
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| Authorization 
+| JWT or Bearer Token  
+| - 
+ 
+
+|===         
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| OK
+|  <<>>
+
+
+| 401
+| UNAUTHORIZED
+|  <<>>
+
+
+| 404
+| NOT FOUND
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}pricing/\{event_id\}/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}pricing/\{event_id\}/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :pricing/{event_id}/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}pricing/\{event_id\}/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.pricingValueIdGet]
+==== Pricing Value GET (ID)
+    
+`GET /pricing/{event_id}`
+
+Retrieve a specific owned rate or price value
+
+===== Description 
+
+This operation retrieves the value for the event.
+
+
+// markup not found, no include::{specDir}pricing/\{event_id\}/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| event_id 
+| Unique Event ID  
+| X 
+ 
+
+|===         
+
+
+
+====== Header Parameters
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| Authorization 
+| JWT or Bearer Token  
+| - 
+ 
+
+|===         
+
+
+
+===== Return Type
+
+<<event_value>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| OK
+|  <<event_value>>
+
+
+| 404
+| NOT FOUND
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}pricing/\{event_id\}/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}pricing/\{event_id\}/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :pricing/{event_id}/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}pricing/\{event_id\}/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.pricingValueIdPut]
+==== Pricing PUT (ID)
+    
+`PUT /pricing/{event_id}`
+
+Updates an existing rate or price reference in the Platform
+
+===== Description 
+
+This operation updates an existing value for a specific event. 
+
+
+// markup not found, no include::{specDir}pricing/\{event_id\}/PUT/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| event_id 
+| Unique Event ID  
+| X 
+ 
+
+|===         
+
+===== Body Parameter
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| Event Value 
+|  <<event_value>> 
+| X 
+|  
+|  
+
+|===         
+
+
+====== Header Parameters
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| Authorization 
+| JWT or Bearer Token  
+| - 
+ 
+
+|===         
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| OK
+|  <<>>
+
+
+| 401
+| UNAUTHORIZED
+|  <<>>
+
+
+| 404
+| NOT FOUND
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}pricing/\{event_id\}/PUT/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}pricing/\{event_id\}/PUT/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :pricing/{event_id}/PUT/PUT.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}pricing/\{event_id\}/PUT/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.pricingPost]
+==== Pricing POST
+    
+`POST /pricing`
+
+Stores rates and prices reference in the Platform
+
+===== Description 
+
+This operation stores the rate or price in the database.
+
+
+// markup not found, no include::{specDir}pricing/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| NewEventValue 
+|  <<NewValue>> 
+| X 
+|  
+|  
+
+|===         
+
+
+====== Header Parameters
+
+[cols="2,3,1"]
+|===         
+|Name| Description| Required
+
+| Authorization 
+| JWT or Bearer Token  
+| - 
+ 
+
+|===         
+
+
+
+===== Return Type
+
+<<event_value>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| OK
+|  <<event_value>>
+
+
+| 401
+| UNAUTHORIZED
+|  <<>>
+
+
+| 404
+| NOT FOUND
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}pricing/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}pricing/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :pricing/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}pricing/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[#models]
+== Models
+
+
+[#NewEventValue]
+=== _NewEventValue_ 
+
+
+
+[.fields-NewEventValue]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| event_id 
+|  
+| String  
+| ID of the event
+|  
+
+|===

@@ -17,15 +17,25 @@
         "post" : {
           "tags" : [ "Pricing Events Calculation" ],
           "summary" : "Rates and prices for events",
-          "description" : "This operation lists all policies filtered by ownership ID. Ownership ID is extracted from the OpenID Connect Token",
+          "description" : "This operation calculates rates and prices for the event received in the JSON Request and then store the value in the database.",
           "responses" : {
             "200" : {
-              "description" : "OK"
+              "description" : "OK",
+              "content" : {
+                "application/json" : {
+                  "schema" : {
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/pricing"
+                    }
+                  }
+                }
+              }
             }
           }
         }
       },
-      "/policy/" : {
+      "/pricing/" : {
         "parameters" : [ {
           "in" : "header",
           "name" : "Authorization",
@@ -35,9 +45,9 @@
           }
         } ],
         "get" : {
-          "tags" : [ "Policy Management" ],
-          "summary" : "List all owned policies",
-          "description" : "This operation lists all policies filtered by ownership ID. Ownership ID is extracted from the OpenID Connect Token",
+          "tags" : [ "Pricing Values Management" ],
+          "summary" : "List all rates and prices from the database",
+          "description" : "This operation lists all rates and prices filtered by event ID. Event ID is extracted from the JSON Request",
           "responses" : {
             "200" : {
               "description" : "OK",
@@ -46,7 +56,7 @@
                   "schema" : {
                     "type" : "array",
                     "items" : {
-                      "$ref" : "#/components/schemas/policy"
+                      "$ref" : "#/components/schemas/pricing"
                     }
                   }
                 }
@@ -55,15 +65,15 @@
           }
         },
         "post" : {
-          "tags" : [ "Policy Management" ],
-          "summary" : "Creates a new Policy reference in the Platform",
-          "description" : "This operation generates a new policy reference object that can be protected. Ownership ID is set to the unique ID of the End-User",
+          "tags" : [ "Pricing Values Management" ],
+          "summary" : "Stores rates and prices reference in the Platform",
+          "description" : "This operation stores the rate or price in the database.",
           "requestBody" : {
             "required" : true,
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/new_policy"
+                  "$ref" : "#/components/schemas/manage_pricing"
                 }
               }
             }
@@ -74,7 +84,7 @@
               "content" : {
                 "application/json" : {
                   "schema" : {
-                    "$ref" : "#/components/schemas/policy"
+                    "$ref" : "#/components/schemas/pricing"
                   }
                 }
               }
@@ -88,11 +98,11 @@
           }
         }
       },
-      "/policy/{policy_id}" : {
+      "/pricing/{event_id}" : {
         "parameters" : [ {
           "in" : "path",
-          "name" : "policy_id",
-          "description" : "Unique Policy ID",
+          "name" : "event_id",
+          "description" : "Unique Event ID",
           "required" : true,
           "schema" : {
             "type" : "string"
@@ -106,16 +116,16 @@
           }
         } ],
         "get" : {
-          "tags" : [ "Policy Management" ],
-          "summary" : "Retrieve a specific owned policy",
-          "description" : "This operation retrieves information about an owned policy.",
+          "tags" : [ "Pricing Values Management" ],
+          "summary" : "Retrieve a specific owned rate or price value",
+          "description" : "This operation retrieves the value for the event.",
           "responses" : {
             "200" : {
               "description" : "OK",
               "content" : {
                 "application/json" : {
                   "schema" : {
-                    "$ref" : "#/components/schemas/policy"
+                    "$ref" : "#/components/schemas/pricing"
                   }
                 }
               }
@@ -126,15 +136,15 @@
           }
         },
         "put" : {
-          "tags" : [ "Policy Management" ],
-          "summary" : "Updates an existing Policy reference in the Platform",
-          "description" : "This operation updates an existing 'owned' policy reference. ",
+          "tags" : [ "Pricing Values Management" ],
+          "summary" : "Updates an existing rate or price reference in the Platform",
+          "description" : "This operation updates an existing value for a specific event.",
           "requestBody" : {
             "required" : true,
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/policy"
+                  "$ref" : "#/components/schemas/pricing"
                 }
               }
             }
@@ -152,9 +162,9 @@
           }
         },
         "delete" : {
-          "tags" : [ "Policy Management" ],
-          "summary" : "Deletes an owned Policy Reference from the Platform",
-          "description" : "This operation removes an existing Policy reference owned by the user.",
+          "tags" : [ "Pricing Values Management" ],
+          "summary" : "Deletes a value from the database",
+          "description" : "This operation removes an existing value owned by the event.",
           "responses" : {
             "200" : {
               "description" : "OK"
@@ -171,91 +181,29 @@
     },
     "components" : {
       "schemas" : {
-        "new_policy" : {
+        "manage_pricing" : {
           "type" : "object",
           "properties" : {
             "name" : {
-              "description" : "Human readable name for the policy",
+              "description" : "Name for the event",
               "type" : "string",
-              "example" : "My Beautiful Policy"
+              "example" : "My value for the Event X"
             },
-            "description" : {
-              "description" : "Custom description for the policy pourpose",
-              "type" : "string",
-              "example" : "This is an ownership enforcement policy"
-            },
-            "policy_cfg" : {
-              "$ref" : "#/components/schemas/policy_cfg"
-            },
-            "scopes" : {
-              "description" : "List of scopes associated with the policy",
-              "type" : "array",
-              "items" : {
-                "type" : "string"
-              },
-              "example" : [ "public", "myOtherAttr" ]
+            "value" : {
+              "description" : "The value for the event",
+              "type" : "integer",
+              "example" : "1234"
             }
           }
         },
-        "policy" : {
+        "pricing" : {
           "type" : "object",
           "properties" : {
-            "ownership_id" : {
-              "description" : "UUID of the Owner End-User",
+            "event_id" : {
+              "description" : "ID of the event",
               "type" : "string",
               "format" : "uuid",
               "example" : "d290f1ee-6c54-4b01-90e6-288571188183"
-            },
-            "id" : {
-              "description" : "UUID of the policy",
-              "type" : "string",
-              "format" : "uuid",
-              "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
-            },
-            "name" : {
-              "description" : "Human readable name for the policy",
-              "type" : "string",
-              "example" : "My Beautiful Policy"
-            },
-            "description" : {
-              "description" : "Custom description for the policy pourpose",
-              "type" : "string",
-              "example" : "This is an ownership enforcement policy"
-            },
-            "policy_cfg" : {
-              "$ref" : "#/components/schemas/policy_cfg"
-            },
-            "scopes" : {
-              "description" : "List of scopes associated with the policy",
-              "type" : "array",
-              "items" : {
-                "type" : "string"
-              },
-              "example" : [ "public", "myOtherAttr" ]
-            }
-          }
-        },
-        "policy_cfg" : {
-          "description" : "Custom rules for the policy configuration\n",
-          "type" : "object",
-          "properties" : {
-            "resource_id" : {
-              "description" : "UUID of the applicable Resource",
-              "type" : "string",
-              "format" : "uuid",
-              "example" : "d290f1ee-6c54-4b01-90e6-288571188183"
-            },
-            "action" : {
-              "description" : "Applicable XACML Action",
-              "type" : "string",
-              "example" : "view"
-            },
-            "rules" : {
-              "type" : "array",
-              "description" : "List of checks to create a policy. Each one will be executed in sequence, and the policy will fail as soon as one fails",
-              "items" : {
-                "type" : "object"
-              }
             }
           }
         }
