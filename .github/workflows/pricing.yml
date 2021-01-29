@@ -44,12 +44,12 @@ jobs:
           pip install -r ./src/requirements.txt
           pytest ./tests
       # - name: Container Creation and Publishing
-      #  run: ./travis/containerCreation.sh um-pricing-engine
+      #  run: ./gh_actions/containerCreation.sh um-pricing-engine
       - name: Smoke and Acceptance Test
-        run: ./travis/acceptanceTest.sh um-pricing-engine 8080 7000
+        run: ./gh_actions/acceptanceTest.sh um-pricing-engine 8080 7000
       # - name: Release Container
       #  if: github.ref == 'refs/heads/master' && github.event != 'pull_request'
-      #  run: ./travis/release.sh um-pricing-engine
+      #  run: ./gh_actions/release.sh um-pricing-engine
         
       
         
